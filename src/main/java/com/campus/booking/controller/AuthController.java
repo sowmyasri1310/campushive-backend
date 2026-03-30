@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class AuthController {
     @Autowired private UserRepository userRepository;
     @Autowired private BookingRepository bookingRepository;
     @Autowired private NotificationRepository notificationRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     // ───────────────── LOGIN ─────────────────
 
@@ -237,4 +239,24 @@ public class AuthController {
         e.printStackTrace(); // ✅ ADD THIS (VERY IMPORTANT)
         return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
     }
+
+@GetMapping("/setup-superadmin")
+public ResponseEntity<?> setupSuperAdmin() {
+    if (userRepository.existsByEmail("superadmin@campus.com")) {
+        return ResponseEntity.ok(Map.of("message", "Super admin already exists"));
+    }
+    
+    User user = User.builder()
+            .name("Super Admin")
+            .email("superadmin@campus.com")
+            .password(passwordEncoder.encode("superadmin123"))
+            .role(User.Role.SUPER_ADMIN)
+            .branch("ALL")
+            .department("Administration")
+            .section(null)
+            .build();
+    
+    userRepository.save(user);
+    return ResponseEntity.ok(Map.of("message", "Super admin created successfully!"));
+}
 }

@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/register").permitAll()
                 .requestMatchers("/api/debug/**").permitAll()
                 .requestMatchers("/api/rooms/**").permitAll()
+                .requestMatchers("/api/auth/setup-superadmin").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -48,9 +49,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-            "https://campushive-frontend.onrender.com",
-            "http://localhost:5173"
-        ));
+        	    "https://campushive-frontend.onrender.com",
+        	    "http://localhost:5173"
+        	));
         config.setAllowedMethods(Arrays.asList(
             "GET","POST","PUT","PATCH","DELETE","OPTIONS","HEAD"
         ));
