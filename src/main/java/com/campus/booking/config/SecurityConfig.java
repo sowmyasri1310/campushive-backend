@@ -47,7 +47,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOrigins(List.of(
+            "https://campushive-frontend.onrender.com",
+            "http://localhost:5173"
+        ));
         config.setAllowedMethods(Arrays.asList(
             "GET","POST","PUT","PATCH","DELETE","OPTIONS","HEAD"
         ));
@@ -55,6 +58,7 @@ public class SecurityConfig {
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
