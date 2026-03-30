@@ -33,14 +33,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/auth/login").permitAll()
-                .requestMatchers("/api/auth/register").permitAll()
-                .requestMatchers("/api/debug/**").permitAll()
-                .requestMatchers("/api/rooms/**").permitAll()
-                .requestMatchers("/api/auth/setup-superadmin").permitAll()
-                .anyRequest().authenticated()
-            )
+            	    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            	    .requestMatchers("/api/auth/login").permitAll()
+            	    .requestMatchers("/api/auth/register").permitAll()
+            	    .requestMatchers("/api/auth/setup-superadmin").permitAll()  // ← ADD THIS
+            	    .requestMatchers("/api/debug/**").permitAll()
+            	    .requestMatchers("/api/rooms/**").permitAll()
+            	    .anyRequest().authenticated()
+            	)
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
